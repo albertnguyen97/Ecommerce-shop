@@ -12,3 +12,13 @@ CREATE DATABASE djangodb;<br>
 GRANT ALL PRIVILEGES ON djangodb.* TO 'bigcat'@'localhost';<br>
 FLUSH PRIVILEGES;<br>
 EXIT;<br>
+pip install pymysql<br>
+
+pip install pymysql<br>
+
+Then, edit the __init__.py file in your project origin dir(the same as settings.py)<br>
+add:<br>
+import pymysql<br>
+pymysql.install_as_MySQLdb()<br>
+
+pip install cryptography<br>

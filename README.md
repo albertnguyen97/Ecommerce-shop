@@ -22,3 +22,6 @@ import pymysql<br>
 pymysql.install_as_MySQLdb()<br>
 
 pip install cryptography<br>
+
+social-auth-account<br>
+pip install social-auth-app-django<br>

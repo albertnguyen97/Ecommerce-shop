@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block title %}{{ product.title }}{% endblock %}
+{% block content %}
+    <div class="image-detail-block">
+        <h1>{{ product.title }}</h1>
+        <div class="detail">
+            <div class="image-detail">
+                <img src="{% thumbnail product.image 200x0 %}">
+            </div>
+            {% with total_likes=product.users_like.count users_like=product.users_like.all %}
+            <div class="product-info">
+                <div>
+                    <span class="count">
+                    <span class="total">{{ total_likes }}</span>
+                    like{{ total_likes|pluralize }}
+                    </span>
+                <a href="#" data-id="{{ product.id }}" data-action="{% if request.user in users_like %}un{% endif %}like" class="like button">
+                  {% if request.user not in users_like %}
+                    Like
+                  {% else %}
+                    Unlike
+                  {% endif %}
+                </a>
+                <p class="{% if product.available == 'true' %}available{% else %}fail{% endif %}">
+                {% if product.available %}Available{% else %}Not Available{% endif %}
+                    <p class="product-description">
+                        {{ product.description|truncatewords_html:100 }}
+                    </p>
+            <div>
+                {% for user in product.users_like.all %}
+                <div>
+                </div>
+                {% empty %}
+                Nobody likes this product yet.
+                {% endfor %}
+            </div>
+            </div>
+        </div>
+    </div>
+{% endwith %}
+{% endblock %}
+{% block domready %}
+  const url = '{% url "shop:product_like" %}';
+  var options = {
+    method: 'POST',
+    headers: {'X-CSRFToken': csrftoken},
+    mode: 'same-origin'
+  }
+  document.querySelector('a.like')
+          .addEventListener('click', function(e){
+    e.preventDefault();
+    var likeButton = this;
+    // add request body
+    var formData = new FormData();
+    formData.append('id', likeButton.dataset.id);
+    formData.append('action', likeButton.dataset.action);
+    options['body'] = formData;
+    // send HTTP request
+    fetch(url, options)
+    .then(response => response.json())
+    .then(data => {
+      if (data['status'] === 'ok')
+      {
+        var previousAction = likeButton.dataset.action;
+        // toggle button text and data-action
+        var action = previousAction === 'like' ? 'unlike' : 'like';
+        likeButton.dataset.action = action;
+        likeButton.innerHTML = action;
+        // update like count
+        var likeCount = document.querySelector('span.count .total');
+        var totalLikes = parseInt(likeCount.innerHTML);
+        likeCount.innerHTML = previousAction === 'like' ? totalLikes + 1 : totalLikes - 1;
+      }
+    })
+  });
+{% endblock %}

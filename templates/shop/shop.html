@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}shop{% endblock %}
+{% if request.user.is_authenticated %}
+{% block content %}
+  <p>Welcome to your shop.</p>
+  <p>
+    You can <a href="{% url "shop:create" %}">add product</a>
+  </p>
+    <p>
+    You can <a href="{% url "shop:product_list_shop" %}">Show product</a>
+  </p>
+
+
+{% endblock %}
+{% endif %}

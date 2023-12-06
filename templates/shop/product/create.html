@@ -1,0 +1,11 @@
+<!-- templates/account/shop/product/create.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Create a New Product</h1>
+  <form method="post" enctype="multipart/form-data">
+    {{ product_form.as_p }}
+    {% csrf_token %}
+    <p><input type="submit" value="Save changes"></p>
+  </form>
+{% endblock %}

@@ -1,8 +1,8 @@
 @import url(//fonts.googleapis.com/css?family=Muli);
 
 body {
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
     font-family:helvetica, sans-serif;
 }
  div {
@@ -36,54 +36,6 @@ h2 {
 
 ol {
     line-height:1.5;
-}
-
-#header {
-    padding: 10px 100px;
-    font-size: 14px;
-    background: #12c064;
-    color: #fff;
-    border-bottom: 4px solid #1cdf78;
-    overflow: auto;
-
-}
-
-#header .logo {
-    font-family: 'Muli', sans-serif;
-    float:left;
-    color:#f3f7cc;
-    font-size:20px;
-    margin-right:10%;
-}
-
-#header ul.menu {
-    list-style:none;
-    float:left;
-    margin:0;
-    padding:0;
-}
-#header ul.menu li {
-    float:left;
-    padding:4px 10px;
-}
-
-#header ul.menu li.selected a, #header ul.menu li.selected a:hover {
-    color:#1b6d32;
-    font-weight:bold;
-}
-
-#header a {
-    color:#f3f7cc;
-}
-#header a:hover {
-    color:#fff;
-}
-
-#header .user,
-#header .bell-icon,
-#header .cart {
-    float:right;
-    padding:4px 10px;
 }
 
 
@@ -208,7 +160,7 @@ ul.messages li a.close {
     cursor: pointer;
 }
 
-a.like, a.follow { float:left; margin-top:-8px;}
+a.like, a.follow { float:left;left: 20px; margin-top:-8px;}
 /* users */
 #people-list img {
     width:180px;
@@ -433,3 +385,25 @@ img.user-detail {
     -webkit-box-orient: vertical;
 }
 
+.shop-content {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.user-avatar {
+  width: 40px; /* Adjust the size as needed */
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: white;
+}

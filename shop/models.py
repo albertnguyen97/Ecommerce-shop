@@ -12,6 +12,7 @@ class Category(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200,
                             unique=True)
+    icon = models.ImageField(blank=True)  # Default icon class
 
     class Meta:
         ordering = ['name']

@@ -1,0 +1,109 @@
+#header {
+    padding: 10px 100px;
+    font-size: 14px;
+    background: #12c064;
+    color: #fff;
+    border-bottom: 4px solid #1cdf78;
+    overflow: auto;
+    display: flex; /* Added display: flex; */
+    align-items: center; /* Vertically center items in the header */
+}
+
+#header .logo {
+    font-family: 'Muli', sans-serif;
+    color: #f3f7cc;
+    font-size: 20px;
+    margin-right: 10%;
+}
+
+#header ul.menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+        display: flex; /* Added display: flex; */
+
+}
+
+#header ul.menu li {
+    padding: 4px 10px;
+}
+
+#header ul.menu li.selected a,
+#header ul.menu li.selected a:hover {
+    color: #1b6d32;
+    font-weight: bold;
+}
+
+#header a {
+    color: #f3f7cc;
+}
+
+#header a:hover {
+    color: #fff;
+}
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.search-bar input[type="text"] {
+    height: 20px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.search-bar button {
+    height: 40px;
+    padding: 10px;
+    background-color: #f90;
+    color: #fff;
+    border: 1px solid #f90;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-bottom: 10px;/* Add margin between input and button */
+}
+
+/* Style the search icon */
+.search-bar button i {
+    margin-right: 5px;
+    align-items: center;
+}
+.search-bar input[type="text"] {
+    width: 400px;
+}
+/* Add margin between the input and button */
+.search-bar input[type="text"],
+.search-bar button {
+    margin-right: 10px;
+    padding: 10px;
+}
+
+/* Hover effect for the button */
+.search-bar button:hover {
+    background-color: #e8800a;
+    border-color: #e8800a;
+}
+
+.user,
+.user-info .bell-icon,
+.user-info .cart-header .search-bar {
+    display: flex; /* Added display: flex; */
+    align-items: center; /* Vertically center items */
+    margin-left: auto; /* Push search bar to the left as much as possible */
+}
+
+.user-info {
+    display: flex; /* Display the user-info container as a flex container */
+    align-items: center; /* Align items in user-info container */
+}
+
+.user-info .bell-icon,
+.user-info .cart-header {
+    padding: 4px 10px;
+    margin-right: 10px; /* Adjust the margin as needed */
+}
+

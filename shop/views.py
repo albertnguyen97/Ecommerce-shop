@@ -8,6 +8,7 @@ from .models import Category, Product
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from cart.forms import CartAddProductForm
 
 
 @login_required
@@ -33,16 +34,19 @@ def product_detail_shop(request, id, slug):
     product = get_object_or_404(Product,
                                 id=id,
                                 slug=slug)
+    cart_product_form = CartAddProductForm()
     return render(request,
                   'shop/product/detail.html',
-                  {'product': product})
+                  {'product': product,
+                   'cart_product_form': cart_product_form})
 
 
 @login_required()
 def product_list_shop(request, category_slug=None):
     category = None
     categories = Category.objects.all()
-    products = Product.objects.all()
+    user = request.user  # Get the currently logged-in user
+    products = Product.objects.filter(user=user)
     if category_slug:
         category = get_object_or_404(Category,
                                      slug=category_slug)
@@ -64,16 +68,27 @@ def product_list_shop(request, category_slug=None):
                    'products': products})
 
 
+@login_required()
 def product_list_market(request, category_slug=None):
     category = None
     categories = Category.objects.all()
-    products = Product.objects.filter(available=True)
+    products = Product.objects.all()
     if category_slug:
         category = get_object_or_404(Category,
                                      slug=category_slug)
         products = products.filter(category=category)
+    paginator = Paginator(products, 20)
+    page = request.GET.get('page')
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        # If the page parameter is not an integer, deliver the first page.
+        products = paginator.page(20)
+    except EmptyPage:
+        # If the page is out of range (e.g., 9999), deliver the last page.
+        products = paginator.page(paginator.num_pages)
     return render(request,
-                  'market/product/list.html',
+                  'shop/product/list.html',
                   {'category': category,
                    'categories': categories,
                    'products': products})

@@ -22,26 +22,31 @@
                     Unlike
                   {% endif %}
                 </a>
-                <p class="{% if product.available == 'true' %}available{% else %}fail{% endif %}">
+                <p class="price">${{ product.price }}</p>
+                <form action="{% url "cart:cart_add" product.id %}" method="post">
+                  {{ cart_product_form }}
+                  {% csrf_token %}
+                  <input type="submit" value="Add to cart">
+                </form>
+                <p class="{% if product.available == True %}available{% else %}fail{% endif %}">
                 {% if product.available %}Available{% else %}Not Available{% endif %}
                     <p class="product-description">
                         {{ product.description|truncatewords_html:100 }}
                     </p>
-            <div>
-                {% for user in product.users_like.all %}
-                <div>
+                    <div>
+                        {% for user in product.users_like.all %}
+                        {% empty %}
+                        Nobody likes this product yet.
+                        {% endfor %}
+                    </div>
                 </div>
-                {% empty %}
-                Nobody likes this product yet.
-                {% endfor %}
-            </div>
             </div>
         </div>
     </div>
 {% endwith %}
 {% endblock %}
 {% block domready %}
-  const url = '{% url "shop:product_like" %}';
+  var url = '{% url "shop:product_like" %}';
   var options = {
     method: 'POST',
     headers: {'X-CSRFToken': csrftoken},

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'shop.apps.ShopConfig',
     'cart.apps.CartConfig',
     'orders',
+    'payment.apps.PaymentConfig',
     'jet.dashboard',
     'jet',
     'django.contrib.admin',
@@ -154,7 +155,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'shop'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -179,3 +180,6 @@ ABSOLUTE_URL_OVERRIDES = {
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 REDIS_DB = 0
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51OPJO9KsjShnriJD1tfY2E8Z8liNekMvIHuxePVR1l7slZgbgE2EnP9LaBDksXmqlZHXAG5moIi2DLCR9YqYwAjV00QFKJM3vF' # Publishable key
+STRIPE_SECRET_KEY = 'sk_test_51OPJO9KsjShnriJDmhfeGRdRcc4uajOreynoRZtJo9MpBtnEMGYjF2W1B1qj0tQdyFDiw6FaR5WdE2PdUIdlsSGE007bv0tn1Q'      # Secret key
+STRIPE_API_VERSION = '2023-10-16'

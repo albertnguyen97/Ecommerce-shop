@@ -30,3 +30,18 @@ class ProductCreateForm(forms.ModelForm):
             product.save()
 
         return product
+
+
+class ProductDeleteForm(forms.Form):
+    class Meta:
+        model = Product
+        fields = ['name']
+        labels = {
+            'name': 'Product Name',
+        }
+        prepopulated_fields = {'slug': ('name'.lower(),)}
+    confirmation = forms.BooleanField(
+        required=True,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        label="I confirm that I want to delete this product."
+    )

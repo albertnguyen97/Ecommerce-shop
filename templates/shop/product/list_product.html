@@ -1,0 +1,91 @@
+{% load static %}
+{% block content %}
+  <div id="sidebar">
+    <ul>
+      <li {% if not category %}class="selected"{% endif %}>
+        <a href="{% url "shop:product_list_shop" %}">All</a>
+      </li>
+      {% for c in categories %}
+        <li {% if category.slug == c.slug %}class="selected"
+        {% endif %}>
+          <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+<div class="main-container">
+<div class="short-bar">
+    <div class="additional-links">
+        <a href="?sort=newest">Newest</a>
+        <a href="?sort=best-sale">Best sale</a>
+        <a href="?sort=popular">Popular</a>
+    </div>
+        <div class="page-links">
+        <span class="total-pages">{{ products.number }}/{{ products.paginator.num_pages }}</span>
+        {% for i in products.paginator.page_range %}
+            <a href="?page={{ i }}" {% if products.number == i %}class="current"{% endif %}></a>
+        {% endfor %}
+    </div>
+</div>
+    <div class="product-container">
+      <div id="main" class="product-list">
+        {% for product in products %}
+          <div class="product-item">
+            <a href="{{ product.get_absolute_url }}">
+              <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_img.png" %}{% endif %}">
+            </a>
+            <p href="{{ product.get_absolute_url }}">{{ product.name }}</p>
+            <div class="rating">
+                <span title="{{ product.average_rating }}/5">
+                    <i class="fa fa-star{% if product.average_rating < 0.5%}-o{% elif product.average_rating >= 0.5 and product.average_rating < 1 %}-half-o{% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if product.average_rating < 1.5%}-o{% elif product.average_rating >= 1.5 and product.average_rating < 2 %}-half-o{% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if product.average_rating < 2.5%}-o{% elif product.average_rating >= 2.5 and product.average_rating < 3 %}-half-o{% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if product.average_rating < 3.5%}-o{% elif product.average_rating >= 3.5 and product.average_rating < 4 %}-half-o{% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if product.average_rating < 4.5%}-o{% elif product.average_rating >= 4.5 and product.average_rating < 5 %}-half-o{% endif %}" aria-hidden="true"></i>
+                </span>
+                <div>{{ product.average_rating }}/5</div>
+            </div>
+            <p class="price">${{ product.price }}</p>
+            <p>{{ product.address }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if products.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ products.previous_page_number }}">previous</a>
+            {% endif %}
+
+            {% with start=products.number|default:0|add:-2 end=products.number|default:0|add:2 %}
+
+                {% for i in products.paginator.page_range %}
+                    {% if i < start or i > end %}
+                        {% if forloop.first and i > end %}
+                            <span class="ellipsis">...</span>
+                        {% endif %}
+                        {% if forloop.last and i < start %}
+                            <span class="ellipsis">...</span>
+                        {% endif %}
+                    {% elif i == start or i == end %}
+                        <a href="?page={{ i }}">{{ i }}</a>
+                    {% elif start < i and i < end %}
+                        {% if products.number == i %}
+                            <span class="current">{{ i }}</span>
+                        {% else %}
+                            <a href="?page={{ i }}">{{ i }}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endwith %}
+
+            {% if products.has_next %}
+                <a href="?page={{ products.next_page_number }}">next</a>
+                <a href="?page={{ products.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+{% endblock %}

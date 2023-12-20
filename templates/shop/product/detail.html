@@ -3,7 +3,7 @@
 {% block title %}{{ product.title }}{% endblock %}
 {% block content %}
     <div class="image-detail-block">
-        <h1>{{ product.title }}</h1>
+        <h1>{{ product.name }}</h1>
         <div class="detail">
             <div class="image-detail">
                 <img src="{% thumbnail product.image 200x0 %}">
@@ -14,6 +14,9 @@
                     <span class="count">
                     <span class="total">{{ total_likes }}</span>
                     like{{ total_likes|pluralize }}
+                    </span>
+                    <span class="count">
+                      {{ total_views }} view{{ total_views|pluralize }}
                     </span>
                 <a href="#" data-id="{{ product.id }}" data-action="{% if request.user in users_like %}un{% endif %}like" class="like button">
                   {% if request.user not in users_like %}

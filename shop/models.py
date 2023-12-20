@@ -6,7 +6,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.utils.text import slugify
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
-
+from django.db.models import Avg
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
@@ -35,7 +35,7 @@ class Rating(models.Model):
     product = models.ForeignKey('Product',
                                 on_delete=models.CASCADE,
                                 related_name='rating')
-    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)], default=0)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -67,6 +67,12 @@ class Product(models.Model):
     users_like = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                         related_name='product_liked',
                                         blank=True)
+    total_likes = models.PositiveIntegerField(default=0)
+
+    def average_rating(self):
+        # Calculate the average rating for the product
+        average = self.rating.aggregate(Avg('rating'))['rating__avg']
+        return round(average, 2) if average is not None else "No rating"
 
     class Meta:
         ordering = ['name', 'user']
@@ -74,6 +80,7 @@ class Product(models.Model):
             models.Index(fields=['id', 'slug']),
             models.Index(fields=['name']),
             models.Index(fields=['-created']),
+            models.Index(fields=['-total_likes'])
         ]
 
     def __str__(self):

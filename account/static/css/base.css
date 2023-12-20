@@ -161,29 +161,9 @@ ul.messages li a.close {
 }
 
 a.like, a.follow { float:left;left: 20px; margin-top:-8px;}
-/* users */
-#people-list img {
-    width:180px;
-    height:180px;
-    border-radius:50%;
-    margin-bottom:20px;
-}
-#people-list .user {
-    width:180px;
-    float:left;
-    overflow:auto;
-    padding:10px;
-}
-#people-list .info { text-align:center; }
-img.user-detail {
-    border-radius:50%;
-    float:left;
-}
-.profile-info {
-    float:left;
-    overflow:auto;
-    margin-right:20px;
-}
+
+
+
 .image-container { margin-top:40px; }
 
 /* actions */
@@ -407,3 +387,34 @@ img.user-detail {
     object-fit: cover;
     background: white;
 }
+
+.create-product {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.create-product form {
+  display: grid;
+  gap: 10px;
+}
+
+.rating {
+  font-size: 15px;
+}
+
+.rating span {
+  color: #ffc107; /* Color for filled stars */
+}
+
+.fa-star, .fa-star-half-o {
+  color: #ffc107; /* Color for empty stars */
+}
+
+.fa-star-o {
+  color: #fff; /* Color for half stars */
+}
+

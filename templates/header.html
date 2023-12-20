@@ -15,10 +15,10 @@
           <a href="{% url "shop" %}">My shop</a>
         </li>
         <li {% if section == "marketplace" %}class="selected"{% endif %}>
-          <a href="marketplace">Marketplace</a>
+          <a href="{% url "shop:product_list_market" %}">Marketplace</a>
         </li>
         <li {% if section == "people" %}class="selected"{% endif %}>
-          <a href="#">People</a>
+          <a href="{% url "user_list" %}">Shops</a>
         </li>
         <li {% if section == "settings" %}class="selected"{% endif %}>
           <a href="{% url "settings" %}">Settings</a>
@@ -31,7 +31,19 @@
     </div>
     <span class="user">
       {% if request.user.is_authenticated %}
-        <div class="cart-header">Your cart is empty.</div>
+        <div class="cart-header">
+          {% with total_items=cart|length %}
+            {% if total_items > 0 %}
+              Your cart:
+              <a href="{% url "cart:cart_detail" %}">
+                {{ total_items }} item{{ total_items|pluralize }},
+                ${{ cart.get_total_price }}
+              </a>
+            {% else %}
+              Your cart is empty.
+            {% endif %}
+          {% endwith %}
+        </div>
     <span class="bell-icon">&#128276;</span>
         Hello {{ request.user.first_name|default:request.user.username }},
       <div class="user-avatar">

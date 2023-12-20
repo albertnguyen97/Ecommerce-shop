@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+from django.urls import reverse_lazy
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,11 +27,31 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['mysite.website', 'localhost', '127.0.0.1']
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'chaunm.hmc@gmail.com'
+EMAIL_HOST_PASSWORD = 'zwdn eyqh rpsy vsex'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_ACCESS_KEY_ID = 'AKIAQKRB5Q5IKJ4AWIXN'
+AWS_SECRET_ACCESS_KEY = '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'
+
+# Additionally, if you are not using the default AWS region of us-east-1,
+# you need to specify a region, like so:
+AWS_SES_REGION_NAME = 'ap-southeast-2'
+AWS_SES_REGION_ENDPOINT = 'email.ap-southeast-2.amazonaws.com'
+
+# If you want to use the SESv2 client
+USE_SES_V2 = True
+SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'shop.apps.ShopConfig',
+    'cart.apps.CartConfig',
+    'orders',
     'jet.dashboard',
     'jet',
     'django.contrib.admin',
@@ -42,7 +63,6 @@ INSTALLED_APPS = [
     'social_django',
     'django_extensions',
     'easy_thumbnails',
-    'cart.apps.CartConfig',
 
 ]
 
@@ -70,6 +90,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -150,3 +171,11 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 
 CART_SESSION_ID = 'cart'
 
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda u: reverse_lazy('user_detail',
+                                        args=[u.username])
+}
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0

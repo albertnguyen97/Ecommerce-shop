@@ -12,7 +12,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['user', 'name', 'slug', 'quantity_product', 'price', 'image',
                     'available', 'created', 'updated']
-    list_filter = ['available', 'created', 'updated']
+    list_filter = ['available', 'created', 'updated', 'total_likes']
     list_editable = ['price', 'available']
     prepopulated_fields = {'slug': ('name',)}
 

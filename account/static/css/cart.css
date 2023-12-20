@@ -16,6 +16,7 @@
   border: 1px solid #ddd;
   padding: 15px;
   text-align: left;
+  align-items: center;
 }
 
 .cart th {
@@ -59,5 +60,25 @@
 
 .text-right {
   text-align: right;
+}
+
+.cart-update-form {
+    display: flex;
+    align-items: center;
+}
+
+.cart-update-fields {
+    display: flex;
+    align-items: center;
+}
+
+.cart-update-quantity select,
+.cart-update-override select {
+    height: 30px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin-right: 10px; /* Adjust the margin as needed */;
+    margin-bottom: 10px;
 }
 

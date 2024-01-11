@@ -1,74 +1,73 @@
 from decimal import Decimal
 from django.conf import settings
+from django.contrib.auth.models import User
 from shop.models import Product
+
+CART_SESSION_ID = settings.CART_SESSION_ID
 
 
 class Cart:
     def __init__(self, request):
-        """
-        Initialize the cart.
-        """
-        self.session = request.session
-        cart = self.session.get(settings.CART_SESSION_ID)
-        if not cart:
-            # save an empty cart in the session
-            cart = self.session[settings.CART_SESSION_ID] = {}
-        self.cart = cart
+        self.request = request
+        self.user = request.user if request.user.is_authenticated else None
+        if self.user:
+            self.cart_data = self.load_cart_from_user()
+        else:
+            self.cart_data = self.load_cart_from_session()
+
+    def load_cart_from_user(self):
+        return self.user.profile.cart_data if hasattr(self.user, 'profile') else {}
+
+    def load_cart_from_session(self):
+        cart = self.request.session.get(CART_SESSION_ID, {})
+        return cart
+
+    def save_cart(self):
+        if self.user:
+            self.user.profile.cart_data = self.cart_data
+            self.user.profile.save()
+        else:
+            self.request.session[CART_SESSION_ID] = self.cart_data
+            self.request.session.modified = True
 
     def add(self, product, quantity=1, override_quantity=False):
-        """
-        Add a product to the cart or update its quantity.
-        """
         product_id = str(product.id)
-        if product_id not in self.cart:
-            self.cart[product_id] = {'quantity': 0,
-                                     'price': str(product.price)}
+        if product_id not in self.cart_data:
+            self.cart_data[product_id] = {'quantity': 0, 'price': str(product.price)}
         if override_quantity:
             if quantity <= product.quantity_product:
-                self.cart[product_id]['quantity'] = quantity
+                self.cart_data[product_id]['quantity'] = quantity
         else:
-            self.cart[product_id]['quantity'] += quantity
-        self.save()
-
-    def save(self):
-        # mark the session as "modified" to make sure it gets saved
-        self.session.modified = True
+            self.cart_data[product_id]['quantity'] += quantity
+        self.save_cart()
 
     def remove(self, product):
-        """
-        Remove a product from the cart.
-        """
         product_id = str(product.id)
-        if product_id in self.cart:
-            del self.cart[product_id]
-            self.save()
+        if product_id in self.cart_data:
+            del self.cart_data[product_id]
+            self.save_cart()
 
     def __iter__(self):
-        """
-        Iterate over the items in the cart and get the products
-        from the database.
-        """
-        product_ids = self.cart.keys()
-        # get the product objects and add them to the cart
+        product_ids = self.cart_data.keys()
         products = Product.objects.filter(id__in=product_ids)
-        cart = self.cart.copy()
+        cart_data = self.cart_data.copy()
         for product in products:
-            cart[str(product.id)]['product'] = product
-        for item in cart.values():
+            cart_data[str(product.id)]['product'] = product
+        for item in cart_data.values():
             item['price'] = Decimal(item['price'])
             item['total_price'] = item['price'] * item['quantity']
             yield item
 
     def __len__(self):
-        """
-        Count all items in the cart.
-        """
-        return sum(item['quantity'] for item in self.cart.values())
+        return sum(item['quantity'] for item in self.cart_data.values())
 
     def get_total_price(self):
-        return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
+        return sum(Decimal(item['price']) * item['quantity'] for item in self.cart_data.values())
 
     def clear(self):
-        # remove cart from session
-        del self.session[settings.CART_SESSION_ID]
-        self.save()
+        if self.user:
+            self.user.profile.cart_data = {}
+            self.user.profile.save()
+        else:
+            del self.request.session[CART_SESSION_ID]
+            self.request.session.modified = True

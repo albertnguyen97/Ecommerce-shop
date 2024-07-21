@@ -1,5 +1,6 @@
 # Ecommerce-shop
 Django, Reactjs, mysql, redis, docker, rabbitMQ, celery, aws
+funny
 
 
 <h1>Database:</h1>
